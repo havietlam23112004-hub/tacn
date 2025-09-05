@@ -690,14 +690,14 @@
         wordsColumn.innerHTML = '';
         defsColumn.innerHTML = '';
 
-        const words = Object.keys(matchingData);
+        // Lấy các từ theo thứ tự gốc (1, 2, 3...)
+        const words = Object.keys(matchingData); 
+
         // Sắp xếp các định nghĩa theo thứ tự chữ cái (a, b, c...)
         const defs = Object.values(matchingData).sort((a, b) => a.localeCompare(b));
 
-        // Xáo trộn các từ
-        const shuffledWords = shuffleArray([...words]);
-
-        shuffledWords.forEach(word => {
+        // KHÔNG xáo trộn cột bên trái nữa
+        words.forEach(word => {
             const item = document.createElement('div');
             item.innerText = word;
             item.dataset.word = word;
