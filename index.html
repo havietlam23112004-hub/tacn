@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Minigames</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tải thư viện Icon -->
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Ngăn cuộn trang */
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #E0FFFF;
+            color: #1a568c;
+            background-image: linear-gradient(to top, #e0f2fe, #bfdbfe);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .waves {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background-repeat: repeat-x;
+            background-position: 0 bottom;
+            transform-origin: center bottom;
+            animation: wave 10s linear infinite;
+        }
+
+        .wave-back {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(167,201,249,0.8)" /><stop offset="100%" style="stop-color:rgba(138,176,229,0.8)" /></linearGradient></defs><path fill="url(%23grad1)" d="M0,224L48,208C96,192,192,160,288,165.3C384,171,480,213,576,202.7C672,192,768,128,864,112C960,96,1056,128,1152,149.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            animation-duration: 18s;
+            z-index: 10;
+        }
+
+        .wave-middle {
+             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><defs><linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(207,253,254,0.8)" /><stop offset="100%" style="stop-color:rgba(166,217,218,0.8)" /></linearGradient></defs><path fill="url(%23grad2)" d="M0,160L48,181.3C96,203,192,245,288,250.7C384,256,480,224,576,192C672,160,768,128,864,133.3C960,139,1056,181,1152,186.7C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            animation-duration: 12s;
+            z-index: 11;
+        }
+
+        .wave-front {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><defs><linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8)" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.6)" /></linearGradient></defs><path fill="url(%23grad3)" d="M0,256L48,240C96,224,192,192,288,176C384,160,480,160,576,176C672,192,768,224,864,218.7C960,213,1056,171,1152,154.7C1248,139,1344,149,1392,154.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            animation-duration: 8s;
+            z-index: 12;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .nav-button.active {
+            background-color: #0284c7;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .game-section {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .correct-pop {
+            animation: popIn 0.3s ease-out;
+        }
+        .matching-item.selected {
+            background-color: #38bdf8;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .matching-item.matched {
+            background-color: #a7f3d0;
+            color: #065f46;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        .word-bank-item.selected {
+            background-color: #0891b2;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .blank {
+            background-color: #e0f2fe;
+            min-width: 100px;
+            display: inline-block;
+            text-align: center;
+            border-bottom: 2px dashed #38bdf8;
+            font-weight: 700;
+        }
+        .option-btn:hover, .matching-item:not(.matched):hover, .word-bank-item:not(.selected):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        /* Ánh sáng */
+        .light-ray-container {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: calc(100% + 100px);
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .light-ray {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            height: 120%;
+            width: 150px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 80%);
+            transform-origin: top center;
+            animation: swayLight 20s infinite ease-in-out;
+        }
+        .light-ray:nth-child(1) { left: 10%; width: 200px; animation-duration: 25s; animation-delay: -5s; }
+        .light-ray:nth-child(2) { left: 30%; width: 100px; animation-duration: 22s; animation-delay: -2s; }
+        .light-ray:nth-child(3) { left: 60%; width: 250px; animation-duration: 18s; animation-delay: -8s; }
+        .light-ray:nth-child(4) { left: 85%; width: 120px; animation-duration: 28s; animation-delay: -12s; }
+
+        @keyframes swayLight {
+            0%, 100% { transform: rotate(-10deg); opacity: 0.8; }
+            50% { transform: rotate(10deg); opacity: 0.6; }
+        }
+        
+        /* Bong bóng & Hạt nổi */
+        .bubble {
+            position: absolute;
+            background-color: #ffffff;
+            opacity: 0.5;
+            border-radius: 50%;
+            animation: bubbleUp linear infinite;
+            bottom: -50px;
+        }
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: bubbleUp linear infinite;
+            bottom: -20px;
+        }
+
+        /* Cát dưới đáy */
+        .sand-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 0;
+            background-color: #F5DEB3;
+            background-image:
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><rect width="80" height="80" fill="%23f3e9d2" /><g fill="%23c6b89e" fill-opacity="0.4"><circle cx="20" cy="20" r="2" /><circle cx="60" cy="60" r="2" /><circle cx="20" cy="60" r="3" /><circle cx="60" cy="20" r="3" /><circle cx="40" cy="40" r="4" /><circle cx="80" cy="0" r="2" /><circle cx="0" cy="80" r="2" /></g></svg>'),
+                radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.3) 0%, transparent 60%),
+                linear-gradient(to top, #F5DEB3 0%, rgba(245,222,179,0.7) 40%, rgba(245,222,179,0) 100%);
+            background-size: 40px, 100% 100%, 100% 100%;
+            background-position: center bottom, center bottom;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Đá */
+        .rock {
+            position: absolute;
+            z-index: 1;
+            bottom: 30px;
+            filter: drop-shadow(-5px 5px 5px rgba(0,0,0,0.2));
+            pointer-events: none;
+        }
+        .rock-1 { left: 20%; width: 120px; bottom: 15px; animation: sway 25s ease-in-out infinite reverse; transform-origin: bottom center;}
+        .rock-2 { right: 25%; width: 160px; bottom: 10px; animation: sway 30s ease-in-out infinite; transform-origin: bottom center;}
+        .rock-3 { left: -2%; width: 110px; bottom: 18px; animation: sway 28s ease-in-out infinite; transform-origin: bottom center;}
+
+
+        /* San hô và rong biển */
+        .coral-1 { position: absolute; bottom: 30px; right: -20px; z-index: 2; width: 200px; animation: sway 12s ease-in-out infinite; transform-origin: bottom center; }
+        .coral-2 { position: absolute; bottom: 40px; left: -15px; z-index: 1; width: 130px; animation: sway 15s ease-in-out infinite; transform-origin: bottom center; }
+        .coral-3 { position: absolute; bottom: 35px; left: 25%; z-index: 3; width: 70px; animation: sway 10s ease-in-out infinite; transform-origin: bottom center; }
+        
+        .seaweed-1 { position: absolute; bottom: 40px; left: 8%; z-index: 2; width: 70px; animation: sway 14s ease-in-out infinite; transform-origin: bottom center; }
+        .seaweed-2 { position: absolute; bottom: 40px; right: 18%; z-index: 1; width: 80px; animation: sway 16s ease-in-out infinite; transform-origin: bottom center; }
+        .seaweed-3 { position: absolute; bottom: 40px; right: 5%; z-index: 3; width: 60px; animation: sway 11s ease-in-out infinite; transform-origin: bottom center; }
+
+
+        /* Các con vật */
+        .fish-left { position: absolute; font-size: 1.8rem; animation: swim-right-to-left 20s linear infinite; top: 20%; right: -100px; animation-delay: 2s; z-index: -2; transform: scaleX(-1); }
+        .fish-right { position: absolute; font-size: 1.8rem; animation: swim-right-to-left 25s linear infinite; top: 35%; right: -100px; animation-delay: 8s; z-index: -2; transform: scaleX(-1); }
+        .octopus { position: absolute; font-size: 2.2rem; bottom: 80px; right: 20%; z-index: 2; animation: octopusSway 10s ease-in-out infinite; }
+        .starfish { position: absolute; font-size: 1.8rem; bottom: 50px; left: 15%; z-index: 2; transform: rotate(-15deg); animation: pulseStar 5s ease-in-out infinite; }
+
+        @keyframes swim-left-to-right {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(110vw); }
+        }
+
+        @keyframes swim-right-to-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-110vw); }
+        }
+
+        @keyframes sway {
+            0% { transform: rotate(-2deg); }
+            25% { transform: rotate(3deg); }
+            75% { transform: rotate(-3deg); }
+            100% { transform: rotate(-2deg); }
+        }
+        @keyframes bubbleUp {
+            0% { transform: translateY(0); opacity: 0.6; }
+            99% { opacity: 0.2; }
+            100% { transform: translateY(-120vh); opacity: 0; }
+        }
+        @keyframes octopusSway {
+            0%, 100% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(10px) rotate(-5deg); }
+        }
+        @keyframes pulseStar {
+            0%, 100% { transform: rotate(-15deg) scale(1); }
+            50% { transform: rotate(-15deg) scale(1.1); }
+        }
+         /* Custom scrollbar for Game 3 */
+        #sentences-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #sentences-container::-webkit-scrollbar-track {
+            background: #e0f2fe;
+            border-radius: 10px;
+        }
+        #sentences-container::-webkit-scrollbar-thumb {
+            background: #38bdf8;
+            border-radius: 10px;
+        }
+        #sentences-container::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+    </style>
+</head>
+<body class="p-4 flex items-center justify-center">
+
+    <!-- Hạt nổi -->
+    <div id="particles-container" class="particles"></div>
+    
+    <!-- Ánh sáng xuyên qua mặt biển -->
+     <div class="light-ray-container">
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+    </div>
+
+    <!-- Bong bóng -->
+    <div id="bubbles-container"></div>
+
+    <!-- Lớp cát dưới cùng -->
+    <div class="sand-bottom"></div>
+
+     <!-- Đá -->
+    <div class="rock rock-1">
+        <svg viewBox="0 0 140 70" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="rockGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#a8a29e" />
+                    <stop offset="50%" stop-color="#8a817c" />
+                    <stop offset="100%" stop-color="#57534e" />
+                </linearGradient>
+            </defs>
+            <path d="M 5,70 C 10,10 60,-10 90,20 C 120,50 135,60 135,70 Z" fill="url(#rockGrad1)" />
+            <path d="M 20,70 C 25,40 50,30 70,45 C 90,60 100,70 100,70 Z" fill="#a8a29e" opacity="0.2"/>
+        </svg>
+    </div>
+    <div class="rock rock-2">
+         <svg viewBox="0 0 180 90" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="rockGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#a1a1aa" />
+                    <stop offset="50%" stop-color="#71717a" />
+                    <stop offset="100%" stop-color="#44403c" />
+                </linearGradient>
+            </defs>
+            <path d="M 0,90 C 20,20 60,-20 110,30 C 160,80 180,85 180,90 Z" fill="url(#rockGrad2)" />
+            <path d="M 30,90 C 40,60 70,50 90,65 C 110,80 130,90 130,90 Z" fill="#a1a1aa" opacity="0.3"/>
+        </svg>
+    </div>
+     <div class="rock rock-3">
+         <svg viewBox="0 0 130 65" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="rockGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#bcaaa4" />
+                    <stop offset="50%" stop-color="#8d6e63" />
+                    <stop offset="100%" stop-color="#78716c" />
+                </linearGradient>
+            </defs>
+            <path d="M 0,65 C 10,15 40,-5 70,15 C 100,35 125,55 130,65 Z" fill="url(#rockGrad3)" />
+        </svg>
+    </div>
+    
+    <!-- Trang trí dưới đáy biển -->
+    <div class="coral-2"> <!-- San hô trái -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full opacity-90 drop-shadow-lg">
+            <defs>
+                <linearGradient id="coralGrad3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d8b4fe"></stop><stop offset="50%" stop-color="#c084fc"></stop><stop offset="100%" stop-color="#9333ea"></stop></linearGradient>
+                <linearGradient id="coralGrad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f9a8d4"></stop><stop offset="50%" stop-color="#f472b6"></stop><stop offset="100%" stop-color="#be185d"></stop></linearGradient>
+            </defs>
+            <path d="M40 0 C10 10 10 40 40 50 S70 90 40 100 C10 90 10 60 40 50 S70 10 40 0Z" transform="scale(0.9) translate(15 15)" fill="url(#coralGrad3)"></path>
+            <path d="M60 0 C30 10 30 40 60 50 S90 90 60 100 C30 90 30 60 60 50 S90 10 60 0Z" transform="scale(1.1) translate(-5 -5)" fill="url(#coralGrad2)"></path>
+        </svg>
+    </div>
+     <div class="coral-1"> <!-- Cụm san hô lớn bên phải -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full opacity-90 drop-shadow-lg" style="transform: scaleX(-1);">
+             <defs>
+                <linearGradient id="coralGrad1-r" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fda4af"></stop><stop offset="50%" stop-color="#fb7185"></stop><stop offset="100%" stop-color="#e11d48"></stop></linearGradient>
+                <linearGradient id="coralGrad2-r" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f9a8d4"></stop><stop offset="50%" stop-color="#f472b6"></stop><stop offset="100%" stop-color="#be185d"></stop></linearGradient>
+                 <linearGradient id="coralGrad3-r" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d8b4fe"></stop><stop offset="50%" stop-color="#c084fc"></stop><stop offset="100%" stop-color="#9333ea"></stop></linearGradient>
+            </defs>
+            <path d="M50 0 C20 10 20 40 50 50 S80 90 50 100 C20 90 20 60 50 50 S80 10 50 0Z" fill="url(#coralGrad1-r)"></path>
+            <path d="M40 0 C10 10 10 40 40 50 S70 90 40 100 C10 90 10 60 40 50 S70 10 40 0Z" transform="scale(0.8) translate(15 15)" fill="url(#coralGrad3-r)"></path>
+            <path d="M60 0 C30 10 30 40 60 50 S90 90 60 100 C30 90 30 60 60 50 S90 10 60 0Z" transform="scale(0.9) translate(-5 -5)" fill="url(#coralGrad2-r)"></path>
+        </svg>
+    </div>
+    <div class="coral-3"> <!-- San hô nhỏ tiền cảnh -->
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full opacity-95 drop-shadow-lg">
+             <defs><linearGradient id="coralGrad4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fbcfe8"></stop><stop offset="50%" stop-color="#f9a8d4"></stop><stop offset="100%" stop-color="#f472b6"></stop></linearGradient></defs>
+            <path d="M50 0 C20 10 20 40 50 50 S80 90 50 100 C20 90 20 60 50 50 S80 10 50 0Z" transform="scale(0.6) rotate(30)" fill="url(#coralGrad4)"></path>
+        </svg>
+    </div>
+
+    <!-- Rong biển -->
+    <div class="seaweed-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200" class="w-full h-full opacity-90 drop-shadow-md">
+             <defs><linearGradient id="seaweedGradLeft" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#34d399"></stop><stop offset="100%" stop-color="#059669"></stop></linearGradient></defs>
+            <g fill="url(#seaweedGradLeft)">
+                <path d="M50,200 C35,170 65,120 50,50 C35,80 65,30 50,0 Q45,100 50,200Z"></path>
+                <path d="M60,200 C50,160 70,110 60,10 C50,60 70,30 60,10 Q55,100 60,200Z" transform="translate(-15, 0) scale(0.8)"></path>
+            </g>
+        </svg>
+    </div>
+    <div class="seaweed-2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200" class="w-full h-full opacity-90 drop-shadow-md">
+             <defs><linearGradient id="seaweedGradRight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2dd4bf"></stop><stop offset="100%" stop-color="#0d9488"></stop></linearGradient></defs>
+            <g fill="url(#seaweedGradRight)">
+                <path d="M50,200 C25,170 75,120 50,50 C25,80 75,30 50,0 Q45,100 50,200Z"></path>
+            </g>
+        </svg>
+    </div>
+     <div class="seaweed-3">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200" class="w-full h-full opacity-80 drop-shadow-sm">
+             <defs><linearGradient id="seaweedGrad3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#5eead4"></stop><stop offset="100%" stop-color="#0d9488"></stop></linearGradient></defs>
+            <g fill="url(#seaweedGrad3)">
+                <path d="M50,200 C40,170 60,120 50,50 C40,80 60,30 50,0 Q45,100 50,200Z" transform="scale(0.7)"></path>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Hiệu ứng sóng -->
+    <div class="waves">
+        <div class="wave wave-back"></div>
+        <div class="wave wave-middle"></div>
+        <div class="wave wave-front"></div>
+    </div>
+    
+    <!-- Các sinh vật biển -->
+    <div class="fish-left">🐠</div>
+    <div class="fish-right">🐠</div>
+    <div class="octopus">🐙</div>
+    <div class="starfish">⭐</div>
+
+    <div class="w-full max-w-6xl bg-sky-100/70 backdrop-blur-sm rounded-2xl shadow-2xl p-4 flex flex-col relative z-20" style="height: 95vh; max-height: 800px;">
+        <!-- Header và Điều hướng -->
+        <header class="text-center mb-3">
+            <h1 class="text-3xl font-extrabold text-sky-800">English Minigames 🏖️</h1>
+            <p class="text-slate-500 text-base">Dive into some fun word games! 🐠</p>
+            <nav class="mt-3 flex justify-center space-x-2">
+                <button id="nav-game1" class="nav-button active text-base font-bold py-2 px-4 rounded-full shadow-md transition-all duration-300 ease-in-out bg-white text-sky-700 border-2 border-sky-200">
+                    Game 1: Quiz
+                </button>
+                <button id="nav-game2" class="nav-button text-base font-bold py-2 px-4 rounded-full shadow-md transition-all duration-300 ease-in-out bg-white text-sky-700 border-2 border-sky-200">
+                    Game 2: Matching
+                </button>
+                <button id="nav-game3" class="nav-button text-base font-bold py-2 px-4 rounded-full shadow-md transition-all duration-300 ease-in-out bg-white text-sky-700 border-2 border-sky-200">
+                    Game 3: Fill in the Blanks
+                </button>
+            </nav>
+        </header>
+
+        <!-- Container chứa các game -->
+        <main id="game-container" class="flex-grow overflow-hidden">
+            <!-- Game 1: Trắc nghiệm -->
+            <section id="game1" class="game-section h-full flex flex-col justify-between">
+                <div id="quiz-container" class="space-y-4">
+                    <!-- Các câu hỏi sẽ được render vào đây -->
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <div class="w-2/3">
+                         <p id="quiz-progress" class="text-base font-semibold text-slate-500 mb-1"></p>
+                         <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="quiz-progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                         </div>
+                    </div>
+                    <button id="next-quiz-btn" class="hidden bg-emerald-500 text-white font-bold py-2 px-5 rounded-full hover:bg-emerald-600 transition-transform transform hover:scale-105">Next</button>
+                </div>
+            </section>
+
+            <!-- Game 2: Nối từ -->
+            <section id="game2" class="game-section hidden h-full flex flex-col">
+                <p class="text-center mb-2 text-lg">Match the word with the correct definition.</p>
+                <div id="matching-container" class="grid grid-cols-2 gap-x-4 flex-grow overflow-auto">
+                    <div id="words-column" class="space-y-1.5"></div>
+                    <div id="defs-column" class="space-y-1.5"></div>
+                </div>
+                 <div id="matching-feedback" class="text-center font-bold mt-2 h-5"></div>
+            </section>
+
+            <!-- Game 3: Điền từ vào chỗ trống -->
+            <section id="game3" class="game-section hidden h-full flex flex-col">
+                <p class="text-center mb-2 text-lg">Choose the correct word to fill in the blank.</p>
+                <div id="word-bank" class="flex flex-wrap justify-center gap-2 mb-2 p-2 bg-blue-50 rounded-lg">
+                    <!-- Các từ sẽ được render vào đây -->
+                </div>
+                <div id="sentences-container" class="flex-grow space-y-1.5 text-base overflow-y-auto pr-2">
+                    <!-- Các câu sẽ được render vào đây -->
+                </div>
+                <p id="fill-blank-feedback" class="text-center font-bold mt-2 h-5"></p>
+            </section>
+        </main>
+        
+        <!-- Modal kết quả -->
+        <div id="result-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-2xl shadow-xl p-6 text-center transform transition-all duration-300 scale-95 opacity-0">
+                <svg class="w-16 h-16 mx-auto text-yellow-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 11.083C7.224 10.162 6 8.24 6 6c0-3.314 2.686-6 6-6s6 2.686 6 6c0 2.24-1.224 4.162-3 5.083M9 21h6m-6 0v-4a3 3 0 013-3h0a3 3 0 013 3v4m-6 0a3 3 0 00-3 3h12a3 3 0 00-3-3"></path></svg>
+                <h2 id="modal-title" class="text-2xl font-bold mb-2 text-slate-800">You're a Starfish! ⭐</h2>
+                <p id="modal-score" class="text-base mb-4 text-slate-600"></p>
+                <button id="modal-restart-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition-transform transform hover:scale-105">Let's Go Again!</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // --- DỮ LIỆU CHO CÁC GAME ---
+    const quizData = [
+        {
+            question: "Government-placed restrictions on trade between nations are...",
+            options: ["A. Tariff", "B. Subsidies", "C. Quotas", "D. Trade barrier"],
+            answer: "D. Trade barrier"
+        },
+        {
+            question: "All nations use some kinds of trade barriers for their own...",
+            options: ["A. Interest", "B. Purposes", "C. Benefits", "D. Profits"],
+            answer: "C. Benefits"
+        },
+        {
+            question: "...is one of the most common reasons for justifying trade barriers.",
+            options: ["A. Protecting domestic employment", "B. Encouraging domestic production", "C. Promoting trade barriers", "D. Both A and B"],
+            answer: "A. Protecting domestic employment"
+        },
+        {
+            question: "The practice of selling foreign imports in the domestic economy at prices lower than the actual cost of production is called...",
+            options: ["A. Dumping", "B. Competing", "C. Challenging", "D. Restricting"],
+            answer: "A. Dumping"
+        },
+        {
+            question: "The price of imported goods is added with...",
+            options: ["A. Tariff", "B. Taxes", "C. Quotas", "D. Non-tariffs"],
+            answer: "A. Tariff"
+        },
+        {
+            question: "______ are used to prevent the import or export of anything with another country.",
+            options: ["A. Subsidies", "B. Tariffs", "C. Quotas", "D. Embargoes"],
+            answer: "D. Embargoes"
+        }
+    ];
+
+    const matchingData = {
+        '1. Trade surplus': 'e. The value of a country’s exports exceeds its imports',
+        '2. Trade deficit': 'c. The value of a country’s imports exceeds its exports',
+        '3. Balance of trade': 'd. The accounts setting out a country’s total imports and exports',
+        '4. Balance of payments': 'b. The accounts setting out a country’s transactions with the rest of the world',
+        '5. External debt': 'a. Money owed by a country to foreign creditors',
+        '6. Debt servicing': 'k. The payment of interest on debts',
+        '7. Devaluation': 'l. Reduction in the value of currency',
+        '8. Growth': 'f. Expansion of the economy',
+        '9. Gross national product (GNP)': 'i. GDP plus other forms of income such as interest, profits and dividends received from abroad',
+        '10. Recession': 'h. Contraction of the economy',
+        '11. Gross domestic product (GDP)': 'g. The value of all the goods and services produced by an economy over a period (e.g. one year)',
+        '12. National per capita income': 'j. The national income divided by the population'
+    };
+    
+    const fillBlankData = {
+        sentences: [
+            "European farmers receive large sums of EU money in the form of {subsidies}.",
+            "If government expenditure is higher than government income, the result is a {budget deficit}.",
+            "If government income is higher than government expenditure, the result is a {budget surplus}.",
+            "In a {boom and bust} economy periods of growth are followed by periods of recession.",
+            "People who work for state-owned organizations such as public hospitals and state schools work in the {public sector}.",
+            "People who work for privately-owned organizations work in the {private sector}.",
+            "Payments by the government to people with little or no other income is called {social security}.",
+            "Buildings, roads, railway lines, telephone networks and power supplies are all part of a country's {infrastructure}.",
+            "A limit on the amount of particular type of import is a {quota}.",
+            "Import tariffs and quotas are types of {trade barrier}.",
+            "The absence of trade barriers is known as {free trade}.",
+            "Britain's most important {trading partners} are France, Germany and the USA.",
+            "\"The world is one big market\". This is one way of describing {globalization}.",
+            "The world price of coffee is not fixed. It is largely controlled by {market forces}.",
+            "When a government makes something easier and less bureaucratic, this is called {deregulation}.",
+            "One of the main ways to measure inflation is the {Retail Price Index (RPI)} which is based on the prices of goods and services.",
+            "The money people have after paying for food, housing and other necessities is called {disposable income}.",
+            "Manufacturing, mining and oil refining are parts of the UK's {industrial base}."
+        ],
+        words: [
+            "subsidies", "budget deficit", "budget surplus", "boom and bust", "public sector", "private sector", "social security", "infrastructure", "quota", "trade barrier", "free trade", "trading partners", "globalization", "market forces", "deregulation", "Retail Price Index (RPI)", "disposable income", "industrial base"
+        ]
+    };
+
+    // --- BIẾN TRẠNG THÁI ---
+    let currentGame = 'game1';
+    let currentQuizQuestion = 0;
+    let quizScore = 0;
+    let selectedWord = null;
+    let selectedDef = null;
+    let matchedPairs = 0;
+    let selectedBankWord = null;
+    let filledBlanks = 0;
+
+    // --- DOM ELEMENTS ---
+    const gameSections = {
+        game1: document.getElementById('game1'),
+        game2: document.getElementById('game2'),
+        game3: document.getElementById('game3'),
+    };
+    const navButtons = {
+        game1: document.getElementById('nav-game1'),
+        game2: document.getElementById('nav-game2'),
+        game3: document.getElementById('nav-game3'),
+    };
+    const resultModal = document.getElementById('result-modal');
+
+
+    // --- HÀM CHUYỂN ĐỔI GAME ---
+    function switchGame(gameId) {
+        currentGame = gameId;
+        for (const id in gameSections) {
+            gameSections[id].classList.add('hidden');
+        }
+        gameSections[gameId].classList.remove('hidden');
+
+        for (const id in navButtons) {
+            navButtons[id].classList.remove('active');
+        }
+        navButtons[gameId].classList.add('active');
+        
+        if (gameId === 'game1') initQuiz();
+        if (gameId === 'game2') initMatching();
+        if (gameId === 'game3') initFillBlank();
+    }
+
+    // --- GAME 1: TRẮC NGHIỆM ---
+    function initQuiz() {
+        currentQuizQuestion = 0;
+        quizScore = 0;
+        document.getElementById('next-quiz-btn').classList.add('hidden');
+        renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = '';
+        const data = quizData[currentQuizQuestion];
+
+        const questionEl = document.createElement('div');
+        questionEl.innerHTML = `<h3 class="text-xl font-bold mb-3 text-center">${currentQuizQuestion + 1}. ${data.question}</h3>`;
+        
+        const optionsEl = document.createElement('div');
+        optionsEl.className = 'grid grid-cols-2 gap-3';
+        
+        data.options.forEach(option => {
+            const button = document.createElement('button');
+            button.innerText = option;
+            button.className = "option-btn bg-white p-3 border-2 border-slate-200 rounded-lg text-left transition-all duration-200 text-base";
+            button.onclick = () => selectQuizAnswer(button, option, data.answer);
+            optionsEl.appendChild(button);
+        });
+
+        quizContainer.appendChild(questionEl);
+        quizContainer.appendChild(optionsEl);
+        
+        const progress = (currentQuizQuestion / quizData.length) * 100;
+        document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
+        document.getElementById('quiz-progress').innerText = `Question ${currentQuizQuestion + 1} of ${quizData.length}`;
+    }
+
+    function selectQuizAnswer(button, selected, correct) {
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (selected === correct) {
+            button.classList.add('bg-green-200', 'border-green-500', 'correct-pop');
+            quizScore++;
+        } else {
+            button.classList.add('bg-red-200', 'border-red-500', 'shake');
+            buttons.forEach(btn => {
+                if (btn.innerText === correct) {
+                    btn.classList.add('bg-green-200', 'border-green-500');
+                }
+            });
+        }
+        
+        const progress = ((currentQuizQuestion + 1) / quizData.length) * 100;
+        document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
+        document.getElementById('next-quiz-btn').classList.remove('hidden');
+    }
+
+    document.getElementById('next-quiz-btn').onclick = () => {
+        currentQuizQuestion++;
+        if (currentQuizQuestion < quizData.length) {
+            document.getElementById('next-quiz-btn').classList.add('hidden');
+            renderQuizQuestion();
+        } else {
+            showResult(`You answered ${quizScore} out of ${quizData.length} questions correctly!`);
+        }
+    };
+
+    // --- GAME 2: NỐI TỪ ---
+    const shuffleArray = array => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    
+    function initMatching() {
+        matchedPairs = 0;
+        selectedWord = null;
+        selectedDef = null;
+        document.getElementById('matching-feedback').textContent = '';
+        
+        const wordsColumn = document.getElementById('words-column');
+        const defsColumn = document.getElementById('defs-column');
+        wordsColumn.innerHTML = '';
+        defsColumn.innerHTML = '';
+
+        const words = Object.keys(matchingData);
+        // Sắp xếp các định nghĩa theo thứ tự chữ cái (a, b, c...)
+        const defs = Object.values(matchingData).sort((a, b) => a.localeCompare(b));
+
+        // Xáo trộn các từ
+        const shuffledWords = shuffleArray([...words]);
+
+        shuffledWords.forEach(word => {
+            const item = document.createElement('div');
+            item.innerText = word;
+            item.dataset.word = word;
+            item.className = "matching-item p-2 bg-white border-2 border-slate-200 rounded-lg cursor-pointer transition-all duration-200 text-sm";
+            item.onclick = () => selectWord(item);
+            wordsColumn.appendChild(item);
+        });
+        
+        defs.forEach(def => {
+            const item = document.createElement('div');
+            item.innerText = def;
+            item.dataset.def = def;
+            item.className = "matching-item p-2 bg-white border-2 border-slate-200 rounded-lg cursor-pointer transition-all duration-200 text-sm";
+            item.onclick = () => selectDef(item);
+            defsColumn.appendChild(item);
+        });
+    }
+
+    function selectWord(el) {
+        if (el.classList.contains('matched')) return;
+        if (selectedWord) selectedWord.classList.remove('selected');
+        selectedWord = el;
+        selectedWord.classList.add('selected');
+        checkMatch();
+    }
+
+    function selectDef(el) {
+        if (el.classList.contains('matched')) return;
+        if (selectedDef) selectedDef.classList.remove('selected');
+        selectedDef = el;
+        selectedDef.classList.add('selected');
+        checkMatch();
+    }
+
+    function checkMatch() {
+        const feedbackEl = document.getElementById('matching-feedback');
+        if (selectedWord && selectedDef) {
+            const word = selectedWord.dataset.word;
+            const def = selectedDef.dataset.def;
+            if (matchingData[word] === def) {
+                selectedWord.classList.remove('selected');
+                selectedDef.classList.remove('selected');
+                selectedWord.classList.add('matched', 'correct-pop');
+                selectedDef.classList.add('matched', 'correct-pop');
+                feedbackEl.textContent = "Correct!";
+                feedbackEl.className = "text-center font-bold mt-2 h-5 text-green-600";
+                selectedWord = null;
+                selectedDef = null;
+                matchedPairs++;
+                if (matchedPairs === Object.keys(matchingData).length) {
+                    setTimeout(() => showResult("You've successfully completed the matching game!"), 500);
+                }
+            } else {
+                feedbackEl.textContent = "Incorrect, try again!";
+                feedbackEl.className = "text-center font-bold mt-2 h-5 text-red-500";
+                selectedWord.classList.add('shake');
+                selectedDef.classList.add('shake');
+                setTimeout(() => {
+                    if (selectedWord) selectedWord.classList.remove('selected', 'shake');
+                    if (selectedDef) selectedDef.classList.remove('selected', 'shake');
+                    selectedWord = null;
+                    selectedDef = null;
+                }, 500);
+            }
+        }
+    }
+
+    // --- GAME 3: ĐIỀN TỪ ---
+    function initFillBlank() {
+        filledBlanks = 0;
+        selectedBankWord = null;
+        document.getElementById('fill-blank-feedback').textContent = '';
+        
+        const wordBank = document.getElementById('word-bank');
+        const sentencesContainer = document.getElementById('sentences-container');
+        wordBank.innerHTML = '';
+        sentencesContainer.innerHTML = '';
+        
+        const shuffledWords = shuffleArray([...fillBlankData.words]);
+        shuffledWords.forEach(word => {
+            const item = document.createElement('div');
+            item.innerText = word;
+            item.dataset.word = word;
+            item.className = "word-bank-item py-1 px-3 bg-white border-2 border-cyan-300 rounded-full cursor-pointer transition-all duration-200 text-sm";
+            item.onclick = () => selectWordFromBank(item);
+            wordBank.appendChild(item);
+        });
+
+        fillBlankData.sentences.forEach((sentence, index) => {
+            const wordInSentence = sentence.match(/\{(.*?)\}/)[1];
+            const p = document.createElement('p');
+            p.innerHTML = `${index + 1}. ` + sentence.replace(`{${wordInSentence}}`, `<span class="blank" data-correct="${wordInSentence}">&nbsp;</span>`);
+            p.querySelector('.blank').onclick = (e) => fillBlank(e.target);
+            sentencesContainer.appendChild(p);
+        });
+    }
+
+    function selectWordFromBank(el) {
+        if (el.classList.contains('selected')) return;
+        
+        if (selectedBankWord) {
+            const prevSelected = document.querySelector(`.word-bank-item[data-word='${selectedBankWord}']`);
+            if (prevSelected) prevSelected.classList.remove('bg-teal-600', 'text-white');
+        }
+        selectedBankWord = el.dataset.word;
+        el.classList.add('bg-teal-600', 'text-white');
+    }
+
+    function fillBlank(el) {
+        const feedbackEl = document.getElementById('fill-blank-feedback');
+        if (!selectedBankWord) {
+            feedbackEl.textContent = "Please select a word from the word bank first!";
+            feedbackEl.className = "text-center font-bold mt-2 h-5 text-blue-600";
+            return;
+        }
+
+        if (el.dataset.correct === selectedBankWord) {
+            el.textContent = selectedBankWord;
+            el.classList.add('bg-emerald-200', 'border-emerald-500', 'text-emerald-800', 'correct-pop');
+            el.style.pointerEvents = 'none';
+            const wordBankItem = document.querySelector(`.word-bank-item[data-word='${selectedBankWord}']`);
+            wordBankItem.classList.add('selected');
+            selectedBankWord = null;
+            filledBlanks++;
+            feedbackEl.textContent = 'Excellent!';
+            feedbackEl.className = "text-center font-bold mt-2 h-5 text-emerald-600";
+            if (filledBlanks === fillBlankData.words.length) {
+                setTimeout(() => showResult("You've filled in the blanks perfectly!"), 500);
+            }
+        } else {
+            feedbackEl.textContent = 'This word is not a good fit!';
+            feedbackEl.className = "text-center font-bold mt-2 h-5 text-red-500";
+            el.classList.add('shake');
+            setTimeout(() => el.classList.remove('shake'), 400);
+        }
+    }
+
+
+    // --- HÀM KẾT QUẢ VÀ KHỞI ĐỘNG LẠI ---
+    function showResult(scoreText) {
+        document.getElementById('modal-score').innerText = scoreText;
+        resultModal.classList.remove('hidden');
+        setTimeout(() => {
+            resultModal.querySelector('div').classList.remove('scale-95', 'opacity-0');
+        }, 10);
+    }
+    
+    document.getElementById('modal-restart-btn').onclick = () => {
+        resultModal.querySelector('div').classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+             resultModal.classList.add('hidden');
+             switchGame(currentGame);
+        }, 300);
+    }
+
+    // --- CÁC HÀM TẠO HIỆU ỨNG NỀN ---
+    function createParticles() {
+        const container = document.getElementById('particles-container');
+        if (!container) return;
+        const particleCount = 30;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 2 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDuration = `${Math.random() * 20 + 15}s`;
+            particle.style.animationDelay = `${Math.random() * 10}s`;
+            container.appendChild(particle);
+        }
+    }
+
+    function createBubbles() {
+        const container = document.getElementById('bubbles-container');
+        if (!container) return;
+        container.innerHTML = '';
+        const bubbleCount = 10;
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 15 + 5;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 95}%`;
+            bubble.style.animationDuration = `${Math.random() * 15 + 10}s`;
+            bubble.style.animationDelay = `${Math.random() * 8}s`;
+            container.appendChild(bubble);
+        }
+    }
+
+
+    // --- KHỞI ĐỘNG GAME LẦN ĐẦU VÀ GẮN EVENT LISTENER ---
+    window.onload = () => {
+        switchGame('game1'); 
+        document.getElementById('nav-game1').addEventListener('click', () => switchGame('game1'));
+        document.getElementById('nav-game2').addEventListener('click', () => switchGame('game2'));
+        document.getElementById('nav-game3').addEventListener('click', () => switchGame('game3'));
+        createParticles();
+        createBubbles();
+    };
+    </script>
+</body>
+</html>
+
